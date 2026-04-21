@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to roundRobinR</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to roundRobinR</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(roundRobinR)</span></code></pre></div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The <code>roundRobinR</code> package provides tools for analyzing
+directed dyadic data collected with a round-robin design, in which every
+person in a group rates or interacts with every other person. The core
+analytical framework is the <strong>Social Relations Model</strong>
+(SRM; Kenny, Kashy, &amp; Cook, 2006), estimated via multilevel modeling
+following Snijders and Kenny (1999) and Knight and Humphrey (2019).</p>
+<p>The SRM decomposes the total variance in a directed dyadic outcome
+into four components:</p>
+<table>
+<colgroup>
+<col width="40%" />
+<col width="59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Group</strong></td>
+<td>How much groups differ in their mean level</td>
+</tr>
+<tr class="even">
+<td><strong>Actor</strong></td>
+<td>How much people differ in what they give or emit</td>
+</tr>
+<tr class="odd">
+<td><strong>Partner</strong></td>
+<td>How much people differ in what they receive or elicit</td>
+</tr>
+<tr class="even">
+<td><strong>Dyad</strong></td>
+<td>Variance in the unique relationship between each specific pair</td>
+</tr>
+</tbody>
+</table>
+<p>In addition, two reciprocity parameters are estimated:</p>
+<ul>
+<li><strong>Generalized reciprocity</strong>: Do people who give a lot
+also tend to receive a lot? (Actor-partner correlation)</li>
+<li><strong>Dyadic reciprocity</strong>: Does person A’s unique
+relationship with person B predict B’s unique relationship with A?
+(Within-dyad relationship correlation)</li>
+</ul>
+</div>
+<div id="the-sample-dataset" class="section level2">
+<h2>The Sample Dataset</h2>
+<p>The package includes <code>sampleDyadData</code>, a simulated dataset
+with 1,548 rows from a round-robin design collected at two time
+points.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(sampleDyadData)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;      groupId actId partId timeId contact liking actEx actAg actMale actAge</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; 4          1     1      2      1       1      7   4.4   4.4       1     19</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 1300       1     1      2      2      NA      7   2.7   3.2       1     19</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 7          1     1      3      1       1      7   4.4   4.4       1     19</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 1303       1     1      3      2      NA      7   2.7   3.2       1     19</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 11         1     1      4      1      NA      7   4.4   4.4       1     19</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 1307       1     1      4      2      NA      7   2.7   3.2       1     19</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;      partEx partAg partMale partAge groupCohesion groupEfficacy</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 4       4.7    1.5        0      20            NA            NA</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 1300    3.8    1.5        0      20            NA            NA</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 7       5.0    1.5        1      21            NA            NA</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 1303    5.6    1.3        1      21            NA            NA</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 11      3.5    2.0        1      20            NA            NA</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 1307    4.7    1.2        1      20            NA            NA</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="fu">nrow</span>(sampleDyadData)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; [1] 1584</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(sampleDyadData<span class="sc">$</span>groupId))</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; [1] 66</span></span></code></pre></div>
+<p>Key variables:</p>
+<ul>
+<li><code>groupId</code>, <code>actId</code>, <code>partId</code> —
+group, actor, and partner identifiers</li>
+<li><code>timeId</code> — time point (1 or 2)</li>
+<li><code>liking</code> — directed dyadic rating of liking (the main
+outcome)</li>
+<li><code>actEx</code>, <code>partEx</code> — actor and partner
+extraversion scores</li>
+<li><code>contact</code> — dyad-level contact frequency</li>
+<li><code>groupCohesion</code> — group-level cohesion</li>
+</ul>
+</div>
+<div id="step-1-create-dummy-variables" class="section level2">
+<h2>Step 1: Create Dummy Variables</h2>
+<p>The SRM requires a set of dummy variables for each actor and partner
+position within a group. <code>createDummies()</code> generates these
+automatically.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">createDummies</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">group.id       =</span> <span class="st">&quot;groupId&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">act.id         =</span> <span class="st">&quot;actId&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">part.id        =</span> <span class="st">&quot;partId&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">d              =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ],</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">merge.original =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">head</span>(d[, <span class="fu">c</span>(<span class="st">&quot;groupId&quot;</span>, <span class="st">&quot;actId&quot;</span>, <span class="st">&quot;partId&quot;</span>, <span class="st">&quot;pdSRM_dyad_id&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>           <span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>, <span class="st">&quot;a4&quot;</span>, <span class="st">&quot;p1&quot;</span>, <span class="st">&quot;p2&quot;</span>, <span class="st">&quot;p3&quot;</span>, <span class="st">&quot;p4&quot;</span>)])</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;   groupId actId partId pdSRM_dyad_id a1 a2 a3 a4 p1 p2 p3 p4</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 1       1     1      2             1  1  0  0  0  0  1  0  0</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 2       1     1      3             2  1  0  0  0  0  0  1  0</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 3       1     1      4             4  1  0  0  0  0  0  0  1</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 4       1     2      1             1  0  1  0  0  1  0  0  0</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 5       1     2      3             3  0  1  0  0  0  0  1  0</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 6       1     2      4             5  0  1  0  0  0  0  0  1</span></span></code></pre></div>
+<p>The key output columns are:</p>
+<ul>
+<li><code>a1</code>–<code>a4</code>: actor dummy variables (one equals 1
+per row, indicating which group position is acting)</li>
+<li><code>p1</code>–<code>p4</code>: partner dummy variables (same, for
+the partner)</li>
+<li><code>pdSRM_dyad_id</code>: undirected dyad identifier (shared by
+i→j and j→i)</li>
+</ul>
+</div>
+<div id="step-2-fit-the-null-srm" class="section level2">
+<h2>Step 2: Fit the Null SRM</h2>
+<p>The simplest model decomposes total variance into the four SRM
+components with no predictors. <code>srmRun()</code> handles dummy
+creation and model fitting in one step.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>null_mod <span class="ot">&lt;-</span> <span class="fu">srmRun</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">dv      =</span> <span class="st">&quot;liking&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">groupId =</span> <span class="st">&quot;groupId&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">actId   =</span> <span class="st">&quot;actId&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">partId  =</span> <span class="st">&quot;partId&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">data    =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>null_mod<span class="sc">$</span>srm.output</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Group                                       0.122                     9.926</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.808                    65.596</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.027                     2.154</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.275                    22.324</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.002                     0.011</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.009                     0.033</span></span></code></pre></div>
+<p>Reading the output:</p>
+<ul>
+<li><code>variances.and.covariances</code>: raw variance estimates for
+each component</li>
+<li><code>percents.and.correlations</code>: for the four variance
+components, the percentage of total variance; for the two reciprocity
+rows, the correlation coefficients</li>
+</ul>
+</div>
+<div id="step-3-fit-a-model-with-predictors" class="section level2">
+<h2>Step 3: Fit a Model with Predictors</h2>
+<p>Adding fixed effects tests whether actor-level, partner-level, or
+dyad-level predictors explain variance in the outcome.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">srmRun</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">dv      =</span> <span class="st">&quot;liking&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">groupId =</span> <span class="st">&quot;groupId&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">actId   =</span> <span class="st">&quot;actId&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">partId  =</span> <span class="st">&quot;partId&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">feVars  =</span> <span class="fu">c</span>(<span class="st">&quot;actEx&quot;</span>, <span class="st">&quot;partEx&quot;</span>, <span class="st">&quot;contact&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">data    =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>full_mod<span class="sc">$</span>srm.output</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Group                                       0.119                     9.790</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.800                    66.073</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.020                     1.667</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.272                    22.470</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.000                    -0.002</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.005                     0.018</span></span></code></pre></div>
+<p>The fixed-effect estimates can be examined with:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(full_mod<span class="sc">$</span>lme.output)<span class="sc">$</span>tTable</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;                   Value  Std.Error  DF    t-value      p-value</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; (Intercept)  5.20484636 0.26625736 683 19.5481783 6.346570e-68</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; actEx        0.07387859 0.06060827 683  1.2189522 2.232832e-01</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; partEx      -0.01342750 0.02468930 683 -0.5438589 5.867161e-01</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; contact      0.07888947 0.01591042 683  4.9583522 8.979027e-07</span></span></code></pre></div>
+</div>
+<div id="step-4-pseudo-r-squared" class="section level2">
+<h2>Step 4: Pseudo R-Squared</h2>
+<p><code>srmPseudoRSq()</code> compares the null and full models to
+estimate the proportion of variance in each component explained by the
+predictors.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">srmPseudoRSq</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">null.model    =</span> null_mod<span class="sc">$</span>lme.output,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">predict.model =</span> full_mod<span class="sc">$</span>lme.output</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;               null    predict    pseudoR2</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Group   0.12228080 0.11860539 0.030057131</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Actor   0.80811232 0.80048626 0.009436881</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Partner 0.02654036 0.02019843 0.238954181</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Dyad    0.27502661 0.27222552 0.010184796</span></span></code></pre></div>
+<p>A positive <code>pseudoR2</code> for a given component means the
+fixed effects reduced that component’s variance, suggesting the
+predictors partly explain the group-, actor-, partner-, or
+relationship-level variation.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Kenny, D. A., Kashy, D. A., &amp; Cook, W. L. (2006). <em>Dyadic Data
+Analysis</em>. Guilford Press.</p>
+<p>Knight, A. P., &amp; Humphrey, S. E. (2019). Dyadic data analysis. In
+S. E. Humphrey &amp; J. M. LeBreton (Eds.), <em>The Handbook for
+Multilevel Theory, Measurement, and Analysis</em> (pp. 423–447).
+American Psychological Association. <a href="https://doi.org/10.1037/0000115-019" class="uri">https://doi.org/10.1037/0000115-019</a></p>
+<p>Snijders, T. A. B., &amp; Kenny, D. A. (1999). The social relations
+model for family data: A multilevel approach. <em>Personal
+Relationships</em>, <em>6</em>, 471–486. <a href="https://doi.org/10.1111/j.1475-6811.1999.tb00204.x" class="uri">https://doi.org/10.1111/j.1475-6811.1999.tb00204.x</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
