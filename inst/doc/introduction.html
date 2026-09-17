@@ -440,15 +440,20 @@ automatically.</p>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">d              =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ],</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">merge.original =</span> <span class="cn">TRUE</span></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>)</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">head</span>(d[, <span class="fu">c</span>(<span class="st">&quot;groupId&quot;</span>, <span class="st">&quot;actId&quot;</span>, <span class="st">&quot;partId&quot;</span>, <span class="st">&quot;pdSRM_dyad_id&quot;</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>           <span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>, <span class="st">&quot;a4&quot;</span>, <span class="st">&quot;p1&quot;</span>, <span class="st">&quot;p2&quot;</span>, <span class="st">&quot;p3&quot;</span>, <span class="st">&quot;p4&quot;</span>)])</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;   groupId actId partId pdSRM_dyad_id a1 a2 a3 a4 p1 p2 p3 p4</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 1       1     1      2             1  1  0  0  0  0  1  0  0</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 2       1     1      3             2  1  0  0  0  0  0  1  0</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 3       1     1      4             4  1  0  0  0  0  0  0  1</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 4       1     2      1             1  0  1  0  0  1  0  0  0</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 5       1     2      3             3  0  1  0  0  0  0  1  0</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 6       1     2      4             5  0  1  0  0  0  0  0  1</span></span></code></pre></div>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Warning in createDummies(group.id = &quot;groupId&quot;, act.id = &quot;actId&quot;, part.id = &quot;partId&quot;, : &#39;createDummies&#39; is deprecated and will be removed in a future version.</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Please use &#39;create_dummies()&#39; instead.</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Argument names have changed: group.id -&gt; group_id, act.id -&gt; act_id,</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; part.id -&gt; part_id, d -&gt; data, include.self -&gt; include_self,</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; merge.original -&gt; merge_original.</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="fu">head</span>(d[, <span class="fu">c</span>(<span class="st">&quot;groupId&quot;</span>, <span class="st">&quot;actId&quot;</span>, <span class="st">&quot;partId&quot;</span>, <span class="st">&quot;pdSRM_dyad_id&quot;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>           <span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>, <span class="st">&quot;a4&quot;</span>, <span class="st">&quot;p1&quot;</span>, <span class="st">&quot;p2&quot;</span>, <span class="st">&quot;p3&quot;</span>, <span class="st">&quot;p4&quot;</span>)])</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;   groupId actId partId pdSRM_dyad_id a1 a2 a3 a4 p1 p2 p3 p4</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 1       1     1      2             1  1  0  0  0  0  1  0  0</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 2       1     1      3             2  1  0  0  0  0  0  1  0</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 3       1     1      4             4  1  0  0  0  0  0  0  1</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 4       1     2      1             1  0  1  0  0  1  0  0  0</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; 5       1     2      3             3  0  1  0  0  0  0  1  0</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; 6       1     2      4             5  0  1  0  0  0  0  0  1</span></span></code></pre></div>
 <p>The key output columns are:</p>
 <ul>
 <li><code>a1</code>–<code>a4</code>: actor dummy variables (one equals 1
@@ -471,14 +476,18 @@ creation and model fitting in one step.</p>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">partId  =</span> <span class="st">&quot;partId&quot;</span>,</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">data    =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ]</span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>null_mod<span class="sc">$</span>srm.output</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Group                                       0.122                     9.926</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.808                    65.596</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.027                     2.154</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.275                    22.324</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.002                     0.011</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.009                     0.033</span></span></code></pre></div>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Warning in srmRun(dv = &quot;liking&quot;, groupId = &quot;groupId&quot;, actId = &quot;actId&quot;, partId = &quot;partId&quot;, : &#39;srmRun&#39; is deprecated and will be removed in a future version.</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Please use &#39;srm_run()&#39; instead.</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Argument names have changed: groupId -&gt; group_id, actId -&gt; act_id,</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; partId -&gt; part_id, feVars -&gt; fe_vars.</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>null_mod<span class="sc">$</span>srm.output</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Group                                       0.122                     9.926</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.808                    65.596</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.027                     2.154</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.275                    22.324</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.002                     0.011</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.009                     0.033</span></span></code></pre></div>
 <p>Reading the output:</p>
 <ul>
 <li><code>variances.and.covariances</code>: raw variance estimates for
@@ -500,14 +509,18 @@ dyad-level predictors explain variance in the outcome.</p>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">feVars  =</span> <span class="fu">c</span>(<span class="st">&quot;actEx&quot;</span>, <span class="st">&quot;partEx&quot;</span>, <span class="st">&quot;contact&quot;</span>),</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">data    =</span> sampleDyadData[sampleDyadData<span class="sc">$</span>timeId <span class="sc">==</span> <span class="dv">1</span>, ]</span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>full_mod<span class="sc">$</span>srm.output</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Group                                       0.119                     9.790</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.800                    66.073</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.020                     1.667</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.272                    22.470</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.000                    -0.002</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.005                     0.018</span></span></code></pre></div>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Warning in srmRun(dv = &quot;liking&quot;, groupId = &quot;groupId&quot;, actId = &quot;actId&quot;, partId = &quot;partId&quot;, : &#39;srmRun&#39; is deprecated and will be removed in a future version.</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Please use &#39;srm_run()&#39; instead.</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Argument names have changed: groupId -&gt; group_id, actId -&gt; act_id,</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; partId -&gt; part_id, feVars -&gt; fe_vars.</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>full_mod<span class="sc">$</span>srm.output</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;                         variances.and.covariances percents.and.correlations</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; Group                                       0.119                     9.790</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; Actor                                       0.800                    66.073</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; Partner                                     0.020                     1.667</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; Dyad                                        0.272                    22.470</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; Generalized Reciprocity                     0.000                    -0.002</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; Dyadic Reciprocity                          0.005                     0.018</span></span></code></pre></div>
 <p>The fixed-effect estimates can be examined with:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(full_mod<span class="sc">$</span>lme.output)<span class="sc">$</span>tTable</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;                   Value  Std.Error  DF    t-value      p-value</span></span>
@@ -525,11 +538,15 @@ predictors.</p>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">null.model    =</span> null_mod<span class="sc">$</span>lme.output,</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">predict.model =</span> full_mod<span class="sc">$</span>lme.output</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>)</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;               null    predict    pseudoR2</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Group   0.12228080 0.11860539 0.030057131</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Actor   0.80811232 0.80048626 0.009436881</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Partner 0.02654036 0.02019843 0.238954181</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Dyad    0.27502661 0.27222552 0.010184796</span></span></code></pre></div>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Warning in srmPseudoRSq(null.model = null_mod$lme.output, predict.model = full_mod$lme.output): &#39;srmPseudoRSq&#39; is deprecated and will be removed in a future version.</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Please use &#39;srm_pseudo_rsq()&#39; instead.</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Argument names have changed: null.model -&gt; null_model,</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; predict.model -&gt; predict_model.</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;               null    predict    pseudoR2</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Group   0.12228080 0.11860539 0.030057131</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Actor   0.80811232 0.80048626 0.009436881</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; Partner 0.02654036 0.02019843 0.238954181</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; Dyad    0.27502661 0.27222552 0.010184796</span></span></code></pre></div>
 <p>A positive <code>pseudoR2</code> for a given component means the
 fixed effects reduced that component’s variance, suggesting the
 predictors partly explain the group-, actor-, partner-, or
